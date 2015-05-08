@@ -33,17 +33,14 @@
       <p>We make available code developed for our clients under a <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank" title="Licence text">BSD 3-Clause Licence</a>, the same open-source licence as DSpace itself. This code can be accessed via <a href="http://github.com/UoW-IRRs">our UoW-IRRs GitHub account</a>. Please understand that we generally cannot offer free support for this code.</p>
 {% if site.github.public_repositories.size > 1 %}
     <h3>Our repositories</h3>
-
-<!--
       <ul>
 {% for repository in site.github.public_repositories %}
 {% unless repository.name == "UoW-IRRs.github.io" %}
   <li>
-    <a href="{% if repository.homepage != null %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> {{ repository.description }}</li>
+    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> {{ repository.description }}</li>
 {% endunless %}
 {% endfor %}
       </ul>      
--->
 {% endif %}
       </li>
 	<li class="slide">
