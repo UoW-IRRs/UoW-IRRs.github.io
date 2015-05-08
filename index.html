@@ -31,9 +31,9 @@
       <p>We make available code developed for our clients under a <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank" title="Licence text">BSD 3-Clause Licence</a>, the same open-source licence as DSpace itself. This code can be accessed via <a href="http://github.com/UoW-IRRs">our UoW-IRRs GitHub account</a>.</p>
 <!--
       <ul>
-	<li><a href="http://UoW-IRRs.github.io/XMLUI-Extras">Extensions for DSpace XMLUI</a></li>
-	<li><a href="http://UoW-IRRs.github.io/API-Extras">Extensions for core DSpace</a> (typically required by the XMLUI extensions)</li>
-	<li><a href="http://UoW-IRRs.github.io/Altmetric-Store">Standalone altmetrics cache application</a></li>
+{% for repository in site.github.repositories %}
+  <li><a href="{{ repository.html_url }}">{{ repository.name }}</a></li>
+{% endfor %}
       </ul>      
 -->
       <p>Please note that we generally cannot offer free support for this code.</p>
