@@ -34,7 +34,9 @@
 <!--
       <ul>
 {% for repository in site.github.public_repositories %}
-  <li><a href="{{ repository.html_url }}">{{ repository.name }}</a></li>
+{% if repository.name != "UoW-IRRs.github.io" %}
+  <li><a href="{{ repository.html_url }}">{{ repository.name }}</a> {{ repository.description }}</li>
+{% endif %}
 {% endfor %}
       </ul>      
 -->
