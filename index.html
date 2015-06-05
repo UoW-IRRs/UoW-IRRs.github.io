@@ -28,7 +28,7 @@ title: Home
 {% for repository in site.github.public_repositories %}
 {% unless repository.name == "UoW-IRRs.github.io" %}
   <li>
-    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a>{{ repository.description }}</li>
+    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> {{ repository.description }}</li>
 {% endunless %}
 {% endfor %}
       </ul>      
