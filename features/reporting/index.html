@@ -1,0 +1,118 @@
+---
+title: Content reporting
+category: feature
+short-story: As a user, I'd like to be able to make DSpace e-mail me CSV files with information to use in content reporting
+---
+
+      <ol class="slides">
+	<li class="slide row">
+	  <h2>What does it do?</h2>
+	  <p class="lead">&quot;{{ page.short-story }}&quot;</p>
+	  <p>The content reporting add-on for DSpace XMLUI lets you
+	  choose from a configurable list of reports. After choosing
+	  some parameters for the report and specifying the date range
+	  and recipient's e-mail address, a CSV file is e-mailed sent
+	  to the specified address. The CSV file contains metadata for
+	  all items that match the report criteria. The idea is that
+	  the recipient will then import the CSV file into a
+	  spreadsheet program and further manipulate the metadata
+	  (e.g.&nbsp; filter or aggregate) to obtain lists of items,
+	  counts of items, diagrams etc.</p>
+	  <p>See also our Open Repositories 2015 poster about the content reporting add-on: <a href="http://hdl.handle.net/10289/9352">http://hdl.handle.net/10289/9352</a></p> 
+	</li>
+	<li class="slide row">
+	  <h2>How does it work?</h2>
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left">
+	      <p>A reporting section is added to the sidebar.</p>
+	      
+	      <p>The sidebar link takes you to the list of reports. This can be configured via an XML file, see &quot;<a href="#config">Configure available reports</a>&quot; below. The reports page gives each report's title and description as well as the list of metadata fields that will be included in the CSV file.</p>
+	      
+	      <p>The report titles are links that take you to the settings page for the selected report.</p>
+	    </div>
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 push-right">
+	      <img src="/images/features/reporting/01-reporting-screen.jpg" class="img-responsive" alt="The reports screen"/>
+	    </div>
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left">
+	      <p>On the report's settings page, you need to select a start and end date for the report and fill in the e-mail address where the CSV file should be sent.</p>
+	      <p>Some reports may have fields set up as &quot;pick&quot; fields, see the &quot;AgResearch Group&quot; field in the screenshot. In that case, the report settings screen will show you a list of all values that exist for this metadata field in your repository. For each &quot;pick&quot; field, you need to select one or more values. Only those items with matching metadata will be included in the CSV file.</p>
+	      <p>The &quot;Request report&quot; button will trigger generation of the report. If there were any problems (e.g.&nbsp; missing required parameters, problems generating the report, problems e-mailing the CSV file), you will receive an error message. Otherwise you will receive a success message and the CSV file should be making its way to the recipient's inbox.</p>
+	    </div>
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 push-right">
+	      <img src="/images/features/reporting/02-set-options.jpg" class="img-responsive" alt="The report settings screen"/>
+	    </div>
+	    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-left">
+	      <p>
+	      Behind the scenes, the report generation code queries
+	      the Solr core for Discovery. The date range entered on
+	      the report settings screen is converted to a Solr query.
+	      The date field can be set on a per-report basis in the
+	      configuration file. Any &quot;pick&quot; values are also
+	      added to the query. The sort options for the report
+	      (sort field and sort order) are also set in the
+	      configuration file on a per-report basis..
+	      </p>
+	      <p>
+		Solr is instructed to save the query results to a temporary file in CSV format. If any post-processors are set up for the report, these are run on the temporary CSV file. Currently, two post-processor implementations exist. One post-processor changes the date format from the one used by Solr, for example to something better compatible with MS&nbsp;Excel. The other post-processor re-writes the handle (stored in 123456789/1234 format in Discovery) to include the canonical handle prefix (e.g.&nbsp;http://hdl.handle.net/) as configured in the DSpace configuration.
+	      </p>
+	      <p>
+		The post-processed file is then e-mailed as an
+		attachment, using an e-mail template (see
+		&quot;<a href="#email-template">Create e-mail
+		template</a>&quot; below).
+	      </p>
+	    </div>
+	</li>
+	<li class="slide row">
+	  <h2><a name="how-to-use"></a>How do I use it?</h2>
+	  <p>To add the content reporting functionality to your DSpace
+	    repository, follow the steps below, then rebuild and
+	    restart DSpace.</p>
+
+	  <h3><a name="code"></a>Pull in the code</h3>	  
+	  <p>Follow the instructions for
+	    the <a href="http://uow-irrs.github.io/XMLUI-Extras">XMLUI-Extras</a>
+	    module.</p>
+
+	  <h3><a name="aspect"></a>Enable the aspect</h3>
+	  <p>Edit <code>[dspace-src]/dspace/config/xmlui.xconf</code>. In the &quot;aspects&quot; section, add the following lines (omit the comment if you prefer):<p>
+	    <pre class="pre-scrollable">&lt;!-- UoW IRRs content reporting aspect from http://uow-irrs.github.io/API-Extras/ --&gt;
+&lt;aspect name="AgResearch Reporting Aspect" path="resource://aspects/Reports/" /&gt;</pre>
+	  <p>It's up to you where in the aspects section you add this, but remember that sidebar entries are generally added in the order that the corresponding aspects are defined in. If you add the line to the very end of the aspects section, the reporting section will appear at the bottom of the sidebar.</p>
+
+	    <h3><a name="config"></a>Configure available reports</h3>
+	    <p>Create the directory <code>[dspace-src]/dspace/config/modules/reporting</code>. Into this directory, place a file with the name <code>reports-configuration.xml</code>. The API-Extras module contains a <a href="https://github.com/UoW-IRRs/API-Extras/blob/master/src/test/resources/reports-configuration.xml">sample configuration file</a>.</p>
+	    <p>Each &quot;field&quot; element will produce a column in the report CSV file. The order of the &quot;field&quot; elements in the configuration file determines the order of the columns. Note that the &quot;header&quot; attribute must not contain any whitespace. For each &quot;field&quot; element, the Discovery index must contain a corresponding field with the same name.</p>
+
+	    <h3><a name="email-template"></a>Create e-mail template</h3>
+	    <p>
+	      Create a file called <code>uow_report_email</code> in the e-mail templates directory, <code>[dspace-src]/dspace/config/emails</code>. The template takes three parameters: the name of the report, the start date and the end date. Example template:
+	    </p>
+	    <pre># Email sent with report data attached as CSV
+#
+# Parameters: {0} name of the canned report
+#             {1} start date
+#             {2} end date
+#
+# See org.dspace.core.Email for information on the format of this file.
+#
+Subject: DSpace - report data
+Attached is the report you requested from DSpace.
+
+Report title: {0}
+Report start date: {1}
+Report end date: {2}
+
+Regards,
+the IRR team</pre>
+
+	    <h3><a name="customise"></a>Optionally: Create and pull in custom post-processors</h3>
+	    <p>The content reporting module as developed for AgResearch comes with two post processors: one to change the date format (<a href="https://github.com/UoW-IRRs/API-Extras/blob/master/src/main/java/nz/ac/waikato/its/dspace/reporting/postprocess/ReformatDates.java">ReformatDates.java</a>) and one to add the canonical handle prefix to the handle field, which is just stored in 123456789/123 form in Discovery (<a href="https://github.com/UoW-IRRs/API-Extras/blob/master/src/main/java/nz/ac/waikato/its/dspace/reporting/postprocess/HandleToCanonicalForm.java">HandleToCanonicalForm.java</a>). You can create additional post-processors.</p>
+	    <p>Create a class that implements
+	    the <code>PostProcessor</code> interface
+	    (<a href="https://github.com/UoW-IRRs/API-Extras/blob/master/src/main/java/nz/ac/waikato/its/dspace/reporting/postprocess/PostProcessor.java">PostProcessor.java</a>). Refer
+	    to the JavaDoc in the interface declaration for expected
+	    functionality. Ensure the class is on the classpath for
+	    your XMLUI web application (eg by adding it to the
+	    &quot;additions&quot; module). Then pull in your custom class in <code>reports-configuration.xml</code> just like the two default post-processors.</p>
+	</li>
+      </ol>

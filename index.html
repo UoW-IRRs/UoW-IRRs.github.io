@@ -1,68 +1,42 @@
 ---
+title: Home
 ---
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>IRR Team at ITS, the University of Waikato</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="stylesheets/style.min.css">
-
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <header>
-      <h1>IRR Team at ITS, the University of Waikato</h1>
-      <p class="tagline">DSpace hosting, support, development and consulting</p>
-    </header>
-    <section id="content" class="container">
       <ol class="slides">
-	<li class="slide">
-      <h2>About us</h2>
-      <p class="lead">The <a href="http://its.waikato.ac.nz/" target="_blank">Information and Technology Services Division</a> at <a href="http://www.waikato.ac.nz/" target="_blank">the University of Waikato</a> provides <a href="http://www.dspace.org/" target="_blank">DSpace</a> hosting, support, development and consulting to clients in the Higher Education and Research sector in New Zealand.</p>
-      </li>
-	<li class="slide">
-      <h2>What is here</h2>
-      <p>We make available code developed for our clients under a <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank" title="Licence text">BSD 3-Clause Licence</a>, the same open-source licence as DSpace itself. This code can be accessed via <a href="http://github.com/UoW-IRRs">our UoW-IRRs GitHub account</a>. Please understand that we generally cannot offer free support for this code.</p>
+	<li class="slide row">
+	  <h2>About us</h2>
+	  <p class="lead">The <a href="http://its.waikato.ac.nz/" target="_blank">Information and Technology Services Division</a> at <a href="http://www.waikato.ac.nz/" target="_blank">the University of Waikato</a> provides <a href="http://www.dspace.org/" target="_blank">DSpace</a> hosting, support, development and consulting to clients in the Higher Education and Research sector in New Zealand.</p>
+	</li>
+	<li class="slide row">
+	  <h2>What is here</h2>
+	  <p>We make available code developed for our clients under a <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank" title="Licence text">BSD 3-Clause Licence</a>, the same open-source licence as DSpace itself. This code can be accessed via <a href="http://github.com/UoW-IRRs">our UoW-IRRs GitHub account</a>. Please understand that we generally cannot offer free support for this code.</p>
+	  <div class="col-lg-6 pull-left">
+      <h3>Features</h3>
+      <p>Much of our custom development goes towards small DSpace improvements. Here are some of the larger features we have developed.</p>
+      {% assign features  = site.pages | where:"category","feature" | sort:"title" %}
+	{% for feature in features %}
+      <div class="feature">
+      <h4><a href="{{ feature.url }}">{{ feature.title }}</a></h4>
+      <p>&quot;{{ feature.short-story }}&quot; <a href="{{ feature.url }}">Read more&hellip;</a></p>
+      </div>
+	{% endfor %}
+      </div>
 {% if site.github.public_repositories.size > 1 %}
-    <h3>Our repositories</h3>
+	  <div class="col-lg-6 push-right">
+    <h3>Code modules</h3>
       <ul>
 {% for repository in site.github.public_repositories %}
 {% unless repository.name == "UoW-IRRs.github.io" %}
   <li>
-    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> {{ repository.description }}</li>
+    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a>{{ repository.description }}</li>
 {% endunless %}
 {% endfor %}
       </ul>      
 {% endif %}
-      </li>
-	<li class="slide">
-      <h2>Contact</h2>
-      <p>If you're interested in our DSpace services, we'd love to hear from you: <a href="mailto:dspace_help@waikato.ac.nz">dspace_help@waikato.ac.nz</a>.</p>
+	  </div>
 	</li>
-	</ol>
-    </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
-            <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-62467742-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
-  </body>
-</html>
+	<li class="slide row">
+	  <h2>Contact</h2>
+	  <p>If you're interested in our DSpace services, we'd love to hear from you: <a href="mailto:dspace_help@waikato.ac.nz">dspace_help@waikato.ac.nz</a>.</p>
+	</li>
+      </ol>
