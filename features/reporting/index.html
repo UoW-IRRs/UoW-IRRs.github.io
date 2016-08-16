@@ -1,11 +1,12 @@
 ---
 title: Content reporting
 category: feature
-short-story: As a user, I'd like to be able to make DSpace e-mail me CSV files with information to use in content reporting
+short-story: As a repository user, I'd like to be able to make DSpace e-mail me CSV files with information to use in content reporting so that I don't have to extract this information manually.
 ---
 
       <ol class="slides">
 	<li class="slide row">
+	  <div class="col-xs-12">
 	  <h2>What does it do?</h2>
 	  <p class="lead">&quot;{{ page.short-story }}&quot;</p>
 	  <p>The content reporting add-on for DSpace XMLUI lets you
@@ -16,31 +17,32 @@ short-story: As a user, I'd like to be able to make DSpace e-mail me CSV files w
 	  all items that match the report criteria. The idea is that
 	  the recipient will then import the CSV file into a
 	  spreadsheet program and further manipulate the metadata
-	  (e.g.&nbsp; filter or aggregate) to obtain lists of items,
+	  (e.g. filter or aggregate) to obtain lists of items,
 	  counts of items, diagrams etc.</p>
-	  <p>See also our Open Repositories 2015 poster about the content reporting add-on: <a href="http://hdl.handle.net/10289/9352">http://hdl.handle.net/10289/9352</a></p> 
+	  <p>See also our Open Repositories 2015 poster about the content reporting add-on: <a href="http://hdl.handle.net/10289/9352">http://hdl.handle.net/10289/9352</a></p>
+	  </div>
 	</li>
 	<li class="slide row">
-	  <h2>How does it work?</h2>
-	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left">
+	  <h2 class="col-xs-12">How does it work?</h2>
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 	      <p>A reporting section is added to the sidebar.</p>
 	      
 	      <p>The sidebar link takes you to the list of reports. This can be configured via an XML file, see &quot;<a href="#config">Configure available reports</a>&quot; below. The reports page gives each report's title and description as well as the list of metadata fields that will be included in the CSV file.</p>
 	      
 	      <p>The report titles are links that take you to the settings page for the selected report.</p>
 	    </div>
-	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 push-right">
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 	      <img src="/images/features/reporting/01-reporting-screen.jpg" class="img-responsive" alt="The reports screen"/>
 	    </div>
-	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left">
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 	      <p>On the report's settings page, you need to select a start and end date for the report and fill in the e-mail address where the CSV file should be sent.</p>
 	      <p>Some reports may have fields set up as &quot;pick&quot; fields, see the &quot;AgResearch Group&quot; field in the screenshot. In that case, the report settings screen will show you a list of all values that exist for this metadata field in your repository. For each &quot;pick&quot; field, you need to select one or more values. Only those items with matching metadata will be included in the CSV file.</p>
 	      <p>The &quot;Request report&quot; button will trigger generation of the report. If there were any problems (e.g.&nbsp; missing required parameters, problems generating the report, problems e-mailing the CSV file), you will receive an error message. Otherwise you will receive a success message and the CSV file should be making its way to the recipient's inbox.</p>
 	    </div>
-	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 push-right">
+	    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 	      <img src="/images/features/reporting/02-set-options.jpg" class="img-responsive" alt="The report settings screen"/>
 	    </div>
-	    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-left">
+	    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 	      <p>
 	      Behind the scenes, the report generation code queries
 	      the Solr core for Discovery. The date range entered on
@@ -63,6 +65,7 @@ short-story: As a user, I'd like to be able to make DSpace e-mail me CSV files w
 	    </div>
 	</li>
 	<li class="slide row">
+	  <div class="col-xs-12">
 	  <h2><a name="how-to-use"></a>How do I use it?</h2>
 	  <p>To add the content reporting functionality to your DSpace
 	    repository, follow the steps below, then rebuild and
@@ -113,6 +116,7 @@ the IRR team</pre>
 	    to the JavaDoc in the interface declaration for expected
 	    functionality. Ensure the class is on the classpath for
 	    your XMLUI web application (eg by adding it to the
-	    &quot;additions&quot; module). Then pull in your custom class in <code>reports-configuration.xml</code> just like the two default post-processors.</p>
+	      &quot;additions&quot; module). Then pull in your custom class in <code>reports-configuration.xml</code> just like the two default post-processors.</p>
+	    </div>
 	</li>
       </ol>

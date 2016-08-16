@@ -4,31 +4,35 @@ title: Home
 
       <ol class="slides">
 	<li class="slide row">
+	  <div class="col-xs-12">
 	  <h2>About us</h2>
 	  <p class="lead">The <a href="http://its.waikato.ac.nz/" target="_blank">Information and Technology Services Division</a> at <a href="http://www.waikato.ac.nz/" target="_blank">the University of Waikato</a> provides <a href="http://www.dspace.org/" target="_blank">DSpace</a> hosting, support, development and consulting to clients in the Higher Education and Research sector in New Zealand.</p>
+	  </div>
 	</li>
 	<li class="slide row">
+	  <div class="col-xs-12">
 	  <h2>What is here</h2>
 	  <p>We make available code developed for our clients under a <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank" title="Licence text">BSD 3-Clause Licence</a>, the same open-source licence as DSpace itself. This code can be accessed via <a href="http://github.com/UoW-IRRs">our UoW-IRRs GitHub account</a>. Please understand that we generally cannot offer free support for this code.</p>
-	  <div class="col-lg-6 pull-left">
+	  </div>
+	  <div class="col-xs-12 col-lg-6">
       <h3>Features</h3>
       <p>Much of our custom development goes towards small DSpace improvements. Here are some of the larger features we have developed.</p>
       {% assign features  = site.pages | where:"category","feature" | sort:"title" %}
 	{% for feature in features %}
       <div class="feature">
       <h4><a href="{{ feature.url }}">{{ feature.title }}</a></h4>
-      <p>&quot;{{ feature.short-story }}&quot; <a href="{{ feature.url }}">Read more&hellip;</a></p>
+      <p>&quot;{{ feature.short-story }}&quot;<br/><a href="{{ feature.url }}">Read more&hellip;</a></p>
       </div>
 	{% endfor %}
       </div>
 {% if site.github.public_repositories.size > 1 %}
-	  <div class="col-lg-6 push-right">
+	  <div class="col-xs-12 col-lg-6">
     <h3>Code modules</h3>
-      <ul>
+      <ul class="list-group">
 {% for repository in site.github.public_repositories %}
 {% unless repository.name == "UoW-IRRs.github.io" or repository.fork == true %}
-  <li>
-    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> {{ repository.description }}</li>
+  <li class="list-group-item">
+    <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> &ndash; {{ repository.description }}</li>
 {% endunless %}
 {% endfor %}
       </ul>      
@@ -36,7 +40,9 @@ title: Home
 	  </div>
 	</li>
 	<li class="slide row">
+	  <div class="col-xs-12">
 	  <h2>Contact</h2>
 	  <p>If you're interested in our DSpace services, we'd love to hear from you: <a href="mailto:dspace_help@waikato.ac.nz">dspace_help@waikato.ac.nz</a>.</p>
+	  </div>
 	</li>
       </ol>

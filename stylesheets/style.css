@@ -15,7 +15,7 @@ ol.slides {
 }
 ol.slides > li {
     background-color:#FFF;
-    padding:1ex 2em;
+    padding:1ex 1em;
     margin-top:4ex;
     margin-bottom:1ex;
     border: 2px solid #DDD;
@@ -33,4 +33,16 @@ header h1 a, header h1 a:visited {
 header h1 a:hover {
     color:inherit:
     text-decoration:underline;
+}
+figure.highlight code.language-xml .nt {
+    font-weight:bold;
+}
+figure.highlight code.language-xml .c {
+    font-style:italic;
+}
+figure.highlight code.language-xml .na {
+    font-weight:bold;
+}
+figure.highlight code.language-xml .s {
+    color:#c7254e;
 }

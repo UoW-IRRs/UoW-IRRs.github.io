@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% unless page.url == '/index.html' %}{{ page.title }} &middot; {% endunless %}IRR Team at ITS, the University of Waikato</title>
+    <title>{% unless page.url == '/' %}{{ page.title }} &middot; {% endunless %}IRR Team at ITS, the University of Waikato</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/style.min.css">
@@ -27,7 +27,7 @@
   </head>
   <body>
     <header>
-      <h1>{% unless page.url == '/index.html' %}{{ page.title }}<br/>{% endunless %}<a href="/">IRR Team at ITS, the University of Waikato</a></h1>
+      <h1>{% unless page.url == '/' %}{{ page.title }}<br/>{% endunless %}<a href="/">IRR Team at ITS, the University of Waikato</a></h1>
       <p class="tagline">DSpace hosting, support, development and consulting</p>
     </header>
     <section id="content" class="container">
