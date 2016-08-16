@@ -1,0 +1,170 @@
+---
+title: Export citation to EndNote
+category: feature
+short-story: As an EndNote user browsing the repository, I want to be able to import an individual item's bibliographic information so that I can be confident I'm citing it correctly.
+---
+
+      <ol class="slides">
+	<li class="slide row">
+	  <div class="col-xs-12">
+	  <h2>What does it do?</h2>
+	  <p class="lead">&quot;{{ page.short-story }}&quot;</p>
+	  <p>The EndNote export add-on for DSpace makes available a
+	  new URL endpoint of the
+	  form <tt>[your-dspace-url]/citation/handle/123456789/123</tt>.
+	  When a repository user follows a link to this endpoint, the
+	  item's metadata will be crosswalked into the RIS format and
+	  the result will be made available for download / import into
+	  the user's citation manager. The RIS format is supported by
+	  many citation managers including EndNote, JabRef,
+	  Mendeley and Zotero.</p>
+	  </div>
+	</li>
+	<li class="slide row">
+	  <div class="col-xs-12">
+	  <h2>How does it work?</h2>	  
+	  <p>You will need to create an export link in a suitable spot
+	  on the item page. This could be near the location of the item's
+	  citation metadata, or elsewhere on the item
+	  page.</p>
+	  <img src="/images/features/endnote/01-link-waikato.png"
+	  class="img-responsive" alt="Export link in the University of
+				      Waikato's repository"/>
+	  <img src="/images/features/endnote/02-link-agresearch.png" class="img-responsive" alt="Export link in the AgResearch repository"/>
+	  <p>To see this functionality in action, visit any <a href="http://researchcommons.waikato.ac.nz/handle/10289/2222" target="_blank">thesis record</a> in the University of Waikato's repository, <a href="http://researchcommons.waikato.ac.nz/" target="_blank">Research Commons</a>.
+	  </div>
+	</li>
+	<li class="slide row">
+	  <div class="col-xs-12">
+	  <h2>How do I use it?</h2>
+	  <h3>Pull in the code</h3>
+	    <p>Follow the instructions for
+	    the <a href="http://uow-irrs.github.io/XMLUI-Extras">XMLUI-Extras</a>
+	      module. You may find that the dependency to the <a href="http://uow-irrs.github.io/API-Extras">API-Extras</a> module is outdated, in which case you will need to define an exclusion in the <code>dspace/modules/xmlui/pom.xml</code> file and add a dependency to a more recent version directly. In that case, you will also need to obtain, build and install the corresponding version of <a href="http://uow-irrs.github.io/API-Extras">API-Extras</a>.</p>
+	  <p>
+	    As an example, in a repository running DSpace&nbsp;5.1, the relevant part of the <code>dspace/modules/xmlui/pom.xml</code> file might look like this:	    
+	  </p>
+{% highlight xml %}<dependencies>
+  <!-- other dependencies go here -->
+  <dependency>
+    <groupId>nz.ac.waikato.its</groupId>
+    <artifactId>xmlui-extras</artifactId>
+    <version>5.1.2</version>
+    <exclusions>
+      <exclusion>
+        <groupId>nz.ac.waikato.its</groupId>
+        <artifactId>api-extras</artifactId>
+      </exclusion>
+    </exclusions>
+  </dependency>
+  <dependency>
+    <groupId>nz.ac.waikato.its</groupId>
+    <artifactId>api-extras</artifactId>
+    <version>5.1.3</version>
+  </dependency>
+</dependencies>{% endhighlight %}
+	    <h3>Change DSpace sitemap</h3>
+	    <p>The citation exporter produces a non-HTML
+	    file. Unfortunately this means that you will need to add a
+	    reference to the main <code>sitemap.xmap</code> file for
+	      DSpace XMLUI.</p>
+	    <ol>
+	  <li>Copy
+	    the <code>[dspace-src]/dspace-xmlui/src/main/webapp/sitemap.xmap</code>
+	    file to the corresponding overlay directory
+	    (<code>[dspace-src]/dspace/modules/xmlui/src/main/webapp/sitemap.xmap</code>)
+	    and change the latter. (Alternatively, you can edit the
+	    file in place, but then you will need to use the full
+	    build option for DSpace rather than the quick build
+	    option.)</li>
+	  <li>In the <code>map:readers</code> section of the sitemap, add an additional line to reference the class that provides the export:
+	    {% highlight xml %}
+<map:readers default="resource">
+  <!-- existing readers go here -->	      
+  <map:reader name="ItemListCitationExporter" src="nz.ac.waikato.its.dspace.exportcitation.ItemListCitationExporter"/>
+</map:readers>{% endhighlight %}
+	  </li>
+	  <li>In the bitstream pipeline section of the sitemap, add an additional <code>map:match</code> block that links the export to the URL pattern:
+	    {% highlight xml %}
+<!-- Bitstream pipeline -->
+<map:pipeline type="noncaching">
+  <!-- Existing pipeline blocks go here -->
+  <map:match pattern="citation/handle/*/*">
+    <map:read type="ItemListCitationExporter">
+      <map:parameter name="handle" value="{1}/{2}"/>
+      <map:parameter name="format" value="{request-param:format}"/>
+    </map:read>
+  </map:match>
+</map:pipeline>{% endhighlight %}
+	  </li>
+	  </ol>
+	    <h3>Configure fields and types mappings</h3>
+	    <p>The metadata fields used in DSpace will need to be
+	    mapped to the RIS fields. Some metadata values will need
+	    to receive special treatment in order to follow
+	    conventions in the RIS format; this is most notably the
+	    case for the metadata values used for item types, but
+	    other metadata fields may be affected as well (e.g. dates,
+	    page ranges).</p>
+	  <p>Thomson Reuters
+	  publishes <a href="http://referencemanager.com/training/ris-format"
+	  target="_blank">documentation about the RIS format</a> that
+	  includes information on the item types supported by RIS and
+	    the fields that should be included for each item type.</p>
+	  <p>The mapping itself depends to a great deal on the metadata fields used in your DSpace instance. DSpace does not provide metadata fields for typical biographical information such as the title of the journal/proceedings, pagination, volume/issue information, etc. As a result, these fields vary greatly across DSpace instances.</p>
+	  <p>The field mappings are defined in a configuration file, <code>dspace/config/modules/endnote-export.cfg</code>. There are three types of settings in this file:</p>
+	  <dl>
+	    <dt><tt>field.XY = schema.element[.qualifier][,schema2.element2[.qualifier2]][(CONVERTER)]</tt></dt><dd>Field mapping, where <code>XY</code> stands for the two-letter RIS name of the field, <code>schema.element[.qualifier]</code> is the corresponding DSpace metadata field, and <code>(CONVERTER)</code> is an optional reference to a converter definition, see below. You can list multiple comma-separated DSpace metadata fields; they will be checked in order and the first value found will be exported.</dd>
+	    <dt><tt>converter.NAME = class</tt></dt><dd>Converter definition, where <code>NAME</code> is the name of the converter and <code>class</code> is the fully qualified name of a Java class that extends the <a href="https://github.com/UoW-IRRs/API-Extras/blob/master/src/main/java/nz/ac/waikato/its/dspace/exportcitation/Converter.java">Converter</a> interface.</dd>
+	    <dt><tt>converterconfig.NAME.key =
+	    value</tt></dt><dd>Configuration option for an individual
+	    converter identified by <code>NAME</code>,
+	    where <code>key</code> is the name of the property
+	    and <code>value</code> the value.</dd>
+	  </dl>
+	  <p>The API-Extras module contains <a href="https://github.com/UoW-IRRs/API-Extras/tree/master/src/main/java/nz/ac/waikato/its/dspace/exportcitation/converters">example converters</a> in the <code>nz.ac.waikato.its.dspace.exportcitation.converters</code> package. Place any additional converters into the <code>dspace/modules/additions/src/main/java</code> directory tree.</p>
+	  <p>A sample configuration file might look like this:</p>
+	  {% highlight jproperties %}
+field.AB = dc.description.abstract
+field.AU = dc.contributor.author
+field.DO = dc.identifier.doi(DOI)
+field.KW = dc.subject
+field.M3 = thesis.degree.level
+field.PB = dc.publisher
+field.PB = thesis.degree.grantor
+field.PY = agresearch.event.date,dc.date.issued,dc.date.available(YEAR)
+field.SN = agresearch.relation.patent,agresearch.relation.report
+field.T2 = dc.relation.ispartof,agresearch.event.title
+field.TI = dc.title
+field.TY = dc.type(TYPE)
+field.UR = dc.identifier.uri(MOREURLS)
+field.VL = thesis.degree.name
+
+converter.DOI = nz.ac.waikato.its.dspace.exportcitation.converters.EndnoteDOIConverter
+converter.TYPE = nz.ac.waikato.its.dspace.exportcitation.converters.AgResearchEndnoteTypeConverter
+converter.YEAR = nz.ac.waikato.its.dspace.exportcitation.converters.DateFormatConverter
+converter.MOREURLS = nz.ac.waikato.its.dspace.exportcitation.converters.UrlFromIdentifierAndRelationConverter
+
+converterconfig.DOI.prefix = ""
+converterconfig.YEAR.format = "y"
+converterconfig.MOREURLS.otherfield = dc.relation.uri{% endhighlight %}
+	  <h3>Add export link to item page</h3>
+	  <p>Anywhere on the item page, add a link constructed to match the URL pattern of the citation export. For example, your <code>item-view.xsl</code> file (which operates on the mets representation of the item's metadata) could contain a block such as:</p>
+	    {% highlight xml %}
+<a class="btn btn-default btn-xs">
+  <xsl:attribute name="href">
+    <xsl:value-of select="$context-path"/>
+    <xsl:text>/citation</xsl:text>
+    <xsl:value-of select="//mets:METS/@OBJID"/>
+    <xsl:text>?format=endnote</xsl:text>
+  </xsl:attribute>
+  <span class="glyphicon glyphicon-export"></span>
+  <xsl:text> </xsl:text>
+  <i18n:text>xmlui.dri2xhtml.METS-1.0.item-citation-endnote</i18n:text>
+</a>{% endhighlight %}
+	    <p>with a corresponding entry in <code>messages.xml</code> to define the translation:</p>
+	    {% highlight xml %}<message key="xmlui.dri2xhtml.METS-1.0.item-citation-endnote">Export to EndNote</message>{% endhighlight %}
+	  
+	  </div>
+	</li>
+      </ol>
