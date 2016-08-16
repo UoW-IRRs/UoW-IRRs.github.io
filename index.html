@@ -26,7 +26,7 @@ title: Home
     <h3>Code modules</h3>
       <ul>
 {% for repository in site.github.public_repositories %}
-{% unless repository.name == "UoW-IRRs.github.io" %}
+{% unless repository.name == "UoW-IRRs.github.io" or repository.fork == true %}
   <li>
     <a href="{% if repository.homepage != '' %}{{ repository.homepage }}{% else %}{{ repository.html_url }}{% endif %}">{{ repository.name }}</a> {{ repository.description }}</li>
 {% endunless %}
