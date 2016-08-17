@@ -1,5 +1,5 @@
 ---
-title: Export citation to EndNote
+title: Export citation to EndNote (RIS)
 category: feature
 short-story: As an EndNote user browsing the repository, I want to be able to import an individual item's bibliographic information so that I can be confident I'm citing it correctly.
 ---
@@ -111,7 +111,8 @@ short-story: As an EndNote user browsing the repository, I want to be able to im
 	  target="_blank">documentation about the RIS format</a> that
 	  includes information on the item types supported by RIS and
 	    the fields that should be included for each item type.</p>
-	  <p>The mapping itself depends to a great deal on the metadata fields used in your DSpace instance. DSpace does not provide metadata fields for typical biographical information such as the title of the journal/proceedings, pagination, volume/issue information, etc. As a result, these fields vary greatly across DSpace instances.</p>
+	  <p>The mapping itself depends to a great deal on the metadata fields used in your DSpace repository. DSpace does not provide metadata fields for typical biographic information such as the title of the journal/proceedings, pagination, volume/issue information, etc. As a result, these fields vary greatly across DSpace repositories.</p>
+	<p><strong>Note:</strong> You will need to have granular bibliographic metadata in your DSpace repository in order to use this add-on, with a separate field for each component.</p>
 	  <p>The field mappings are defined in a configuration file, <code>dspace/config/modules/endnote-export.cfg</code>. There are three types of settings in this file:</p>
 	  <dl>
 	    <dt><tt>field.XY = schema.element[.qualifier][,schema2.element2[.qualifier2]][(CONVERTER)]</tt></dt><dd>Field mapping, where <code>XY</code> stands for the two-letter RIS name of the field, <code>schema.element[.qualifier]</code> is the corresponding DSpace metadata field, and <code>(CONVERTER)</code> is an optional reference to a converter definition, see below. You can list multiple comma-separated DSpace metadata fields; they will be checked in order and the first value found will be exported.</dd>
